@@ -9,7 +9,6 @@ def get_world_bank_data(indicator, country, start_year, end_year):
         data = response.json()
         if len(data) > 1:
             df = pd.json_normalize(data[1])
-            print(f"Data collected for {indicator}: {df.head()}")
             return df
         else:
             raise ValueError("No data found for the specified parameters")
@@ -22,8 +21,7 @@ def save_data_to_csv(data, filename):
     print(f"Data saved to {filepath}")
 
 if __name__ == "__main__":
-    os.makedirs('../../data/raw', exist_ok=True)
-    os.makedirs('../../data/processed', exist_ok=True)
+    os.makedirs('data/raw', exist_ok=True)
 
     indicators = {
         'GDP': 'NY.GDP.MKTP.CD',

@@ -5,7 +5,7 @@ def process_data(filename):
     filepath = os.path.join('data/raw', filename)
     if os.path.exists(filepath):
         data = pd.read_csv(filepath)
-        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+        data['date'] = pd.to_datetime(data['date'].str.extract(r'(\d{4})')[0], format='%Y') 
         data['value'] = pd.to_numeric(data['value'], errors='coerce')
         data = data.dropna(subset=['date', 'value'])
         return data
