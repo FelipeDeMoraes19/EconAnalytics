@@ -9,6 +9,7 @@ def get_world_bank_data(indicator, country, start_year, end_year):
         data = response.json()
         if len(data) > 1:
             df = pd.json_normalize(data[1])
+            print(f"Data collected for {indicator}: {df.head()}")
             return df
         else:
             raise ValueError("No data found for the specified parameters")
@@ -16,9 +17,15 @@ def get_world_bank_data(indicator, country, start_year, end_year):
         raise ConnectionError(f"Failed to fetch data: {response.status_code}")
 
 def save_data_to_csv(data, filename):
-    data.to_csv(filename, index=False)
+    filepath = os.path.abspath(filename)
+    data.to_csv(filepath, index=False)
+    print(f"Data saved to {filepath}")
 
 if __name__ == "__main__":
+    # Certifique-se de que os diretórios existem
+    os.makedirs('../../data/raw', exist_ok=True)
+    os.makedirs('../../data/processed', exist_ok=True)
+
     indicators = {
         'GDP': 'NY.GDP.MKTP.CD',
         'Inflation': 'FP.CPI.TOTL',
@@ -31,13 +38,13 @@ if __name__ == "__main__":
 
     try:
         gdp_data = get_world_bank_data(indicators['GDP'], country, start_year, end_year)
-        save_data_to_csv(gdp_data, '../../data/raw/gdp_data.csv')
+        save_data_to_csv(gdp_data, 'data/raw/gdp_data.csv')
         
         inflation_data = get_world_bank_data(indicators['Inflation'], country, start_year, end_year)
-        save_data_to_csv(inflation_data, '../../data/raw/inflation_data.csv')
+        save_data_to_csv(inflation_data, 'data/raw/inflation_data.csv')
         
         unemployment_data = get_world_bank_data(indicators['Unemployment'], country, start_year, end_year)
-        save_data_to_csv(unemployment_data, '../../data/raw/unemployment_data.csv')
+        save_data_to_csv(unemployment_data, 'data/raw/unemployment_data.csv')
         
         print("Data collection complete!")
     except ValueError as e:
