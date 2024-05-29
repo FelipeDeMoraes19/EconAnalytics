@@ -1,40 +1,27 @@
-import pandas as pd
 import os
+import pandas as pd
 
-def load_data(filename):
+def process_data(filename):
     filepath = os.path.join('data/raw', filename)
     if os.path.exists(filepath):
         data = pd.read_csv(filepath)
-        print(f"Data loaded from {filepath}")
+        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+        data['value'] = pd.to_numeric(data['value'], errors='coerce')
+        data = data.dropna(subset=['date', 'value'])
         return data
     else:
-        print(f"File {filepath} does not exist.")
-        return None
-
-def clean_data(data):
-    cleaned_data = data.dropna()
-    return cleaned_data
-
-def save_cleaned_data(data, filename):
-    filepath = os.path.join('data/processed', filename)
-    data.to_csv(filepath, index=False)
-    print(f"Data saved to {filepath}")
+        raise FileNotFoundError(f"File {filepath} does not exist.")
 
 if __name__ == "__main__":
-    gdp_data = load_data('gdp_data.csv')
-    inflation_data = load_data('inflation_data.csv')
-    unemployment_data = load_data('unemployment_data.csv')
+    os.makedirs('data/processed', exist_ok=True)
 
-    if gdp_data is not None:
-        gdp_cleaned = clean_data(gdp_data)
-        save_cleaned_data(gdp_cleaned, 'gdp_data_cleaned.csv')
-    
-    if inflation_data is not None:
-        inflation_cleaned = clean_data(inflation_data)
-        save_cleaned_data(inflation_cleaned, 'inflation_data_cleaned.csv')
-    
-    if unemployment_data is not None:
-        unemployment_cleaned = clean_data(unemployment_data)
-        save_cleaned_data(unemployment_cleaned, 'unemployment_data_cleaned.csv')
+    gdp_data = process_data('gdp_data.csv')
+    gdp_data.to_csv('data/processed/gdp_data_cleaned.csv', index=False)
+
+    inflation_data = process_data('inflation_data.csv')
+    inflation_data.to_csv('data/processed/inflation_data_cleaned.csv', index=False)
+
+    unemployment_data = process_data('unemployment_data.csv')
+    unemployment_data.to_csv('data/processed/unemployment_data_cleaned.csv', index=False)
 
     print("Data processing complete!")

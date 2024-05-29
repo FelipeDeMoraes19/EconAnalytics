@@ -1,8 +1,8 @@
-import os
-import pandas as pd
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 import plotly.express as px
+import pandas as pd
+import os
 
 def load_cleaned_data(filename):
     filepath = os.path.join('data/processed', filename)
@@ -13,8 +13,11 @@ def load_cleaned_data(filename):
         raise FileNotFoundError(f"File {filepath} does not exist.")
 
 gdp_data = load_cleaned_data('gdp_data_cleaned.csv')
+print(gdp_data.head())  
 inflation_data = load_cleaned_data('inflation_data_cleaned.csv')
+print(inflation_data.head())  
 unemployment_data = load_cleaned_data('unemployment_data_cleaned.csv')
+print(unemployment_data.head())  
 
 app = Dash(__name__)
 
