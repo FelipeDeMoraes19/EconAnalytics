@@ -22,7 +22,6 @@ def save_data_to_csv(data, filename):
     print(f"Data saved to {filepath}")
 
 if __name__ == "__main__":
-    # Certifique-se de que os diretórios existem
     os.makedirs('../../data/raw', exist_ok=True)
     os.makedirs('../../data/processed', exist_ok=True)
 

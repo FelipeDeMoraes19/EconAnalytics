@@ -12,7 +12,6 @@ def load_data(filename):
         return None
 
 def clean_data(data):
-    # Exemplo de limpeza de dados: remover linhas com valores ausentes
     cleaned_data = data.dropna()
     return cleaned_data
 
@@ -22,13 +21,11 @@ def save_cleaned_data(data, filename):
     print(f"Data saved to {filepath}")
 
 if __name__ == "__main__":
-    # Carregar dados
     gdp_data = load_data('gdp_data.csv')
     inflation_data = load_data('inflation_data.csv')
     unemployment_data = load_data('unemployment_data.csv')
 
     if gdp_data is not None:
-        # Limpar dados
         gdp_cleaned = clean_data(gdp_data)
         save_cleaned_data(gdp_cleaned, 'gdp_data_cleaned.csv')
     
