@@ -1,3 +1,5 @@
 pandas
 requests
 dash
+matplotlib
+scikit-learn
